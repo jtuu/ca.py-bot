@@ -1,29 +1,34 @@
 import discord
 import asyncio
+import os
 import re
+from .module_loader import ModuleLoader
+
+def is_well_formed_plugin(plugin):
+    return hasattr(plugin, "trigger") and isinstance(plugin.trigger, re._pattern_type) and hasattr(plugin, "action") and callable(plugin.action)
 
 class Bot(discord.Client):
     def __init__(self, config):
         discord.Client.__init__(self)
         self.__config = config
-        self.__triggers = [] # tuple(RE trigger, lambda Message m: void)[]
+        plugin_dir_path = os.path.abspath(os.path.dirname(__file__) + "/plugins")
+        self.__plugin_loader = ModuleLoader(module_dir_path=plugin_dir_path)
 
     def run(self):
-        super(Bot, self).run(self.__config.get("token"))
-
-    def Trigger(self, regexp):
-        def register_trigger(fn):
-            trigger = (re.compile(regexp), fn)
-            self.__triggers.append(trigger)
-            return fn
-        return register_trigger
+        loop = asyncio.get_event_loop()
+        self.__plugin_loader.run(loop)
+        loop.run_until_complete(asyncio.wait([
+            asyncio.ensure_future(super(Bot, self).start(self.__config.get("token"))),
+        ]))
 
     async def on_ready(self):
         print("Logged in as " + self.user.name)
 
     async def on_message(self, msg):
-        for trigger in self.__triggers:
-            pattern = trigger[0]
-            action = trigger[1]
-            if pattern.search(msg.clean_content):
-                await action(msg)
+        for plugin in self.__plugin_loader.get_modules():
+            if is_well_formed_plugin(plugin):
+                if plugin.trigger.search(msg.clean_content):
+                    await plugin.action(self, msg)
+            else:
+                print("Plugin %s is not well formed" % plugin.__file__)
+                self.__plugin_loader.unload_module(plugin.__file__)
