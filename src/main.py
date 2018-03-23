@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from .discord_client import DiscordClient
+from .bot import Bot
 from .utils import read_file_relative, discord_snowflake_to_datetime, random_date_between
 
 def format_quote(msg):
@@ -9,7 +9,7 @@ def format_quote(msg):
 config = json.load(read_file_relative("../config.json"))
 channel_geneses = json.load(read_file_relative("./channel_geneses.json"))
 
-bot = DiscordClient(config)
+bot = Bot(config)
 
 @bot.Trigger("^!quote")
 async def quote(msg):
