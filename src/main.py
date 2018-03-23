@@ -1,21 +1,7 @@
-import os
 import json
-from datetime import datetime, timedelta
-from random import randint
-import asyncio
-from discord_client import DiscordClient
-
-def read_file_relative(path):
-    return open(os.path.dirname(os.path.realpath(__file__)) + "/" + path)
-
-# specific to discord
-def snowflake_to_datetime(snowflake):
-    return datetime.fromtimestamp(((int(snowflake) / 4194304) + 1420070400000) / 1000)
-
-def random_date_between(a, b):
-    max = int((b - a).total_seconds())
-    d = timedelta(seconds=randint(0, max))
-    return a + d
+from datetime import datetime
+from .discord_client import DiscordClient
+from .utils import read_file_relative, discord_snowflake_to_datetime, random_date_between
 
 def format_quote(msg):
     return str(msg.author.name) + ": " + str(msg.content)
@@ -31,7 +17,7 @@ async def quote(msg):
 
     if genesis_id:
         now = datetime.now()
-        genesis = snowflake_to_datetime(genesis_id)
+        genesis = discord_snowflake_to_datetime(genesis_id)
         query_date = random_date_between(genesis, now)
 
         logs = bot.logs_from(msg.channel, after=query_date, limit=1)
