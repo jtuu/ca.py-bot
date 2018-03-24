@@ -10,5 +10,5 @@ def random_date_between(a, b):
     d = timedelta(seconds=randint(0, max))
     return a + d
 
-def querify(params):
-    return "?" + urllib.parse.urlencode(params)
+def querify(params, allow_duplicates=False):
+    return "?" + urllib.parse.urlencode(params, doseq=allow_duplicates)
