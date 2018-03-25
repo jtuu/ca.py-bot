@@ -17,7 +17,7 @@ def get_term(term):
         print("Urban Dictionary request failed: %s" % err)
     else:
         try:
-            parsed = json.loads(response)
+            parsed = json.loads(response.decode("utf-8"))
         except json.JSONDecodeError as err:
             print("Failed to parse Urban Dictionary response: %s" % err)
         else:

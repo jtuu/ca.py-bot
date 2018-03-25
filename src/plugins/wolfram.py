@@ -39,7 +39,7 @@ async def action(bot, msg):
         except urllib.error.HTTPError as err:
             print("Wolfram Alpha query request failed: %s" % err)
         else:
-            formatted = format_response(response)
+            formatted = format_response(response.decode("utf-8"))
             if formatted:
                 await bot.send_message(msg.channel, formatted)
             else:

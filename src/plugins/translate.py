@@ -144,7 +144,7 @@ async def action(bot, msg):
             print("Google Translate request failed: %s" % err)
         else:
             try:
-                parsed = json.loads(response)
+                parsed = json.loads(response.decode("utf-8"))
             except json.JSONDecodeError as err:
                 print("Failed to parse Google Translate response: %s" % err)
             else:
