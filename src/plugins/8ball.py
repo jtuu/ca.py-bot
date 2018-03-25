@@ -26,8 +26,6 @@ answers = [
     "Very doubtful"
 ]
 
-prefix = "8-ball says: "
-
 async def action(bot, msg):
     answer = random.choice(answers)
-    await bot.send_message(msg.channel, prefix + answer)
+    await bot.send_message(msg.channel, answer)
