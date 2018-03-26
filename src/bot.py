@@ -43,10 +43,11 @@ class Bot(discord.Client):
         print("Logged in as " + self.user.name)
 
     async def on_message(self, msg):
-        for plugin in self.__plugin_loader.get_modules():
-            if is_well_formed_plugin(plugin):
-                if plugin.trigger.search(msg.clean_content):
-                    await plugin.action(self, msg)
-            else:
-                print("Plugin %s is not well formed" % plugin.__file__)
-                self.__plugin_loader.unload_module(plugin.__file__)
+        if not msg.author.bot:    
+            for plugin in self.__plugin_loader.get_modules():
+                if is_well_formed_plugin(plugin):
+                    if plugin.trigger.search(msg.clean_content):
+                        await plugin.action(self, msg)
+                else:
+                    print("Plugin %s is not well formed" % plugin.__file__)
+                    self.__plugin_loader.unload_module(plugin.__file__)
