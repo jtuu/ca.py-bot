@@ -7,11 +7,12 @@ def is_module(filepath):
     return os.path.splitext(filepath)[1] == ".py"
 
 class ModuleLoader(pyinotify.ProcessEvent):
-    def my_init(self, module_dir_path):
+    def my_init(self, module_dir_path, verbose=False):
         self.module_dir_path = module_dir_path
+        self.verbose = verbose
         self.__modules = dict()
         self.__notifier = None
-        self.__watch_flags = pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_MODIFY
+        self.__watch_flags = pyinotify.IN_CREATE | pyinotify.IN_DELETE | pyinotify.IN_CLOSE_WRITE
         self.__exclude_list = ["__init__.py"]
     
     def run(self, loop):
@@ -44,13 +45,14 @@ class ModuleLoader(pyinotify.ProcessEvent):
             return module
         except Exception as ex:
             print("Failed to load module at %s: %s" % (filepath, ex))
-        
 
     def load_module(self, filepath):
         if is_module(filepath):
             should_reload = filepath in self.__modules
             module = self.reload_module(filepath) if should_reload else self.force_load_module(filepath)
             if module:
+                if self.verbose:
+                    print("Loaded module at %s" % filepath)
                 self.__modules[filepath] = module
 
     def load_all_modules(self):
@@ -69,5 +71,5 @@ class ModuleLoader(pyinotify.ProcessEvent):
     def process_IN_DELETE(self, event):
         self.unload_module(event.pathname)
     
-    def process_IN_MODIFY(self, event):
+    def process_IN_CLOSE_WRITE(self, event):
         self.load_module(event.pathname)

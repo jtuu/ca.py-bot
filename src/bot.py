@@ -13,7 +13,7 @@ class Bot(discord.Client):
         discord.Client.__init__(self)
         self.__config = config
         plugin_dir_path = os.path.abspath(os.path.dirname(__file__) + "/plugins")
-        self.__plugin_loader = ModuleLoader(module_dir_path=plugin_dir_path)
+        self.__plugin_loader = ModuleLoader(module_dir_path=plugin_dir_path, verbose=True)
 
     def run(self):
         loop = asyncio.get_event_loop()
