@@ -17,6 +17,9 @@ async def action(bot, msg):
 
     # for some reason the discord api returns the messages in reverse chronological order
     logs = bot.logs_from(msg.channel, after=query_date, limit=log_limit)
-    quote_msg = await logs.__anext__()
 
-    await bot.send_message(msg.channel, format_quote(quote_msg))
+    async for log_msg in logs:
+        if log_msg.author != bot.user and not bot.is_message_triggering(log_msg):
+            break
+
+    await bot.send_message(msg.channel, format_quote(log_msg))

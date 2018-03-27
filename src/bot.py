@@ -42,6 +42,12 @@ class Bot(discord.Client):
     async def on_ready(self):
         print("Logged in as " + self.user.name)
 
+    def is_message_triggering(self, msg):
+        for plugin in self.__plugin_loader.get_modules():
+            if is_well_formed_plugin(plugin) and plugin.trigger.search(msg.clean_content):
+                return True
+        return False
+
     async def on_message(self, msg):
         if not msg.author.bot:    
             for plugin in self.__plugin_loader.get_modules():
