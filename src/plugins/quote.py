@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from random import randint
 
 trigger = re.compile("^!quote")
+keywords = ["quote"]
 
 def format_quote(msg):
     return str(msg.author.name) + ": " + str(msg.content)
@@ -11,6 +12,8 @@ def format_quote(msg):
 max_log_length = 100
 
 async def action(bot, msg):
+    """**!quote**
+    Prints a random message from the channel."""
     now = datetime.now()
     query_date = random_date_between(msg.channel.created_at, now)
     log_limit = randint(1, max_log_length)

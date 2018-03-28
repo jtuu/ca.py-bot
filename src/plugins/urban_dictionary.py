@@ -5,6 +5,7 @@ from ..utils import querify
 from discord import Embed
 
 trigger = re.compile("^!ud")
+keywords = ["ud", "urban", "urban dictionary"]
 
 match_pattern = re.compile(r"^!ud\s+(\S+)")
 base_url = "http://api.urbandictionary.com/v0/define"
@@ -34,6 +35,8 @@ max_embed_field_length = 1024
 max_embed_footer_length = 2048
 
 async def action(bot, msg):
+    """**!ud** _term_
+    Prints the Urban Dictionary definition for _term_."""
     match = match_pattern.match(msg.clean_content)
     if match:
         term = get_term(match.groups()[0])

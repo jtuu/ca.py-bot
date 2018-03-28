@@ -4,6 +4,7 @@ import urllib.request
 from ..utils import querify
 
 trigger = re.compile("^!tr(?:anslate)?")
+keywords = ["tr", "translate"]
 
 match_pattern = re.compile(r"^!tr(?:anslate)?\s+(\S+)\s+(\S+)\s*(.*)", re.DOTALL)
 newline = re.compile(r"\n")
@@ -135,6 +136,14 @@ def format_response(response):
     except Exception:
         pass
 
+doc = "**!tr** [_source\_lang_] _target\_lang_ _text_\n" \
+"Translates _text_ from _source\_lang_ to _target\_lang_ using Google Translate. " \
+"If _source\_lang_ is omitted then the language is automatically detected.\n_source\_lang_ and _target\_lang_ must be one of the following: " + languages[0]
+
+for lang in languages[1:]:
+    doc += ", " + lang
+doc += "."
+
 async def action(bot, msg):
     url = get_url(msg.clean_content)
     if url:
@@ -151,3 +160,5 @@ async def action(bot, msg):
                 formatted = format_response(parsed)
                 if formatted:
                     await bot.send_message(msg.channel, formatted)
+
+action.__doc__ = doc

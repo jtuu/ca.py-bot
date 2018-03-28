@@ -4,6 +4,7 @@ import os
 import json
 
 trigger = re.compile("^!capybot")
+keywords = ["info", "capybot", "bot"]
 
 config = json.load(open(os.path.abspath(os.path.dirname(__file__) + "/info.json")))
 base_url = "https://api.github.com"
@@ -18,8 +19,9 @@ def get_latest_commit_message():
     except (urllib.error.HTTPError, json.JSONDecodeError) as err:
         print("Failed to get latest commit message from Github: %s" % err)
 
-
 async def action(bot, msg):
+    """**!capybot**
+    Displays basic information about this bot."""
     text = "%s made by %s: https://github.com/%s" % (config["name"], config["author"], config["github"]) 
     commit_msg = get_latest_commit_message()
     if commit_msg:

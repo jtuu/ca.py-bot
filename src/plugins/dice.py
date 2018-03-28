@@ -3,9 +3,15 @@ import random
 import sys
 
 trigger = re.compile("^!dice")
+keywords = ["dice", "golf"]
+
 match_pattern = re.compile(r"^!dice\s+(\d+)d(\d+)(?:([+-])(\d+))?")
 
 async def action(bot, msg):
+    """**!dice** _dice_**d**_sides_[+|-_modifier_]
+    Simulate a dice roll. _Dice_ is the number of dice to roll and _sides_ is the number of sides each die has. Optionally you can specify _modifier_, prefixed with + or -.
+    `!dice 1d20+3`
+    """
     match = match_pattern.match(msg.clean_content)
 
     if match:

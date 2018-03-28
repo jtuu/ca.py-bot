@@ -2,6 +2,7 @@ import re
 import random
 
 trigger = re.compile("^!8ball")
+keywords = ["8ball", "8-ball"]
 
 answers = [
     "It is certain",
@@ -27,5 +28,7 @@ answers = [
 ]
 
 async def action(bot, msg):
+    """**!8ball**
+    Responds to a yes-no question."""
     answer = random.choice(answers)
     await bot.send_message(msg.channel, answer)

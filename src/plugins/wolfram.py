@@ -6,6 +6,7 @@ import xml.etree.cElementTree as etree
 from ..utils import querify
 
 trigger = re.compile("^!(?:wolfram|wa)")
+keywords = ["wa", "wolfram", "wolfram alpha"]
 
 match_pattern = re.compile(r"^!(?:wolfram|wa)\s+(.+)")
 base_url = "http://api.wolframalpha.com/v2/query"
@@ -30,6 +31,9 @@ def format_response(response):
             return element.text
 
 async def action(bot, msg):
+    """**!wa** _query_
+    Query Wolfram Alpha the computational knowledge engine.
+    `!wa what is the average air speed of an unladen swallow`"""
     match = match_pattern.match(msg.clean_content)
     if match:
         params = dict(default_params)

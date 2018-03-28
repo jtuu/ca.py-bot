@@ -6,6 +6,7 @@ from discord import Embed
 from ..utils import querify
 
 trigger = re.compile("^!g(?:oogle)?")
+keywords = ["g", "google"]
 
 match_pattern = re.compile(r"^!g(?:oogle)?\s+(.+)")
 base_url = "https://www.googleapis.com/customsearch/v1"
@@ -26,6 +27,8 @@ def format_response(response):
         return embed
 
 async def action(bot, msg):
+    """**!g** _search\_term_
+    Does a Google search for _search\_term_."""
     match = match_pattern.match(msg.clean_content)
     if match:
         params = dict(default_params)
