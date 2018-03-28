@@ -49,6 +49,14 @@ class Bot(discord.Client):
                 return True
         return False
 
+    def find_plugin_by_keyword(self, search_kw):
+        for plugin in self.__plugin_loader.get_modules():
+            if hasattr(plugin, "keywords"):
+                for kw in plugin.keywords:
+                    if levenshtein_distance(kw, search_kw) < 2:
+                        return plugin
+        return None
+
     async def on_message(self, msg):
         if not msg.author.bot:    
             for plugin in self.__plugin_loader.get_modules():
