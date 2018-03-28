@@ -11,7 +11,7 @@ newline = re.compile(r"\n")
 dir_pattern = re.compile(r"^.+?(\/.+)")
 file_pattern = re.compile(r"(\S+)$")
 
-async def action(bot, msg):
+def init():
     global fortune_dir
     if not fortune_dir:
         file_list = newline.split(subprocess.run(["fortune", "-f"], stderr=subprocess.PIPE).stderr.decode("utf-8"))
@@ -23,6 +23,9 @@ async def action(bot, msg):
                 if file_match:
                     fortune_files.append(file_match.groups()[0])
 
+init()
+
+async def action(bot, msg):
     fortune_file = default_file
 
     option_match = match_pattern.match(msg.clean_content)
