@@ -64,7 +64,7 @@ class Bot(discord.Client):
         if not msg.author.bot:    
             for plugin in self.__plugin_loader.get_modules():
                 if is_well_formed_plugin(plugin):
-                    if plugin.trigger.search(msg.clean_content):
+                    if plugin.trigger.search(msg.clean_content.lower()):
                         await plugin.action(self, msg)
                 else:
                     print("Plugin %s is not well formed" % plugin.__file__)
