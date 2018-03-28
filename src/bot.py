@@ -3,7 +3,7 @@ import asyncio
 import os
 import re
 from .module_loader import ModuleLoader
-from .utils import discord_escape
+from .utils import discord_escape, levenshtein_distance
 
 def is_well_formed_plugin(plugin):
     return hasattr(plugin, "trigger") and isinstance(plugin.trigger, re._pattern_type) and hasattr(plugin, "action") and callable(plugin.action)
@@ -23,19 +23,20 @@ class Bot(discord.Client):
         ]))
 
     @asyncio.coroutine
-    def send_message(self, destination, content=None, *, tts=False, embed=None):
-        if content:
-            content = discord_escape(content)
-        
-        if embed:
-            if embed.title is not discord.Embed.Empty:
-                embed.title = discord_escape(embed.title)
-            if embed.description is not discord.Embed.Empty:
-                embed.description = discord_escape(embed.description)
-            if embed.fields is not discord.Embed.Empty and len(embed.fields) > 0:
-                for field in embed.fields:
-                    field.name = discord_escape(field.name)
-                    field.value = discord_escape(field.value)
+    def send_message(self, destination, content=None, *, tts=False, embed=None, escape_formatting=True):
+        if escape_formatting:
+            if content:
+                content = discord_escape(content)
+            
+            if embed:
+                if embed.title is not discord.Embed.Empty:
+                    embed.title = discord_escape(embed.title)
+                if embed.description is not discord.Embed.Empty:
+                    embed.description = discord_escape(embed.description)
+                if embed.fields is not discord.Embed.Empty and len(embed.fields) > 0:
+                    for field in embed.fields:
+                        field.name = discord_escape(field.name)
+                        field.value = discord_escape(field.value)
 
         return super().send_message(destination, content=content, tts=tts, embed=embed)
 
