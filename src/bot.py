@@ -57,6 +57,9 @@ class Bot(discord.Client):
                         return plugin
         return None
 
+    def get_good_plugin_keywords(self):
+        return [plugin.keywords[0] for plugin in self.__plugin_loader.get_modules() if hasattr(plugin, "keywords")]
+
     async def on_message(self, msg):
         if not msg.author.bot:    
             for plugin in self.__plugin_loader.get_modules():
