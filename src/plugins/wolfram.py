@@ -32,8 +32,8 @@ def format_response(response):
 
 async def action(bot, msg):
     """**!wa** _query_
-    Query Wolfram Alpha the computational knowledge engine.
-    `!wa what is the average air speed of an unladen swallow`"""
+Query Wolfram Alpha the computational knowledge engine.
+`!wa what is the average air speed of an unladen swallow`"""
     match = match_pattern.match(msg.clean_content)
     if match:
         params = dict(default_params)

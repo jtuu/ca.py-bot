@@ -29,6 +29,6 @@ answers = [
 
 async def action(bot, msg):
     """**!8ball**
-    Responds to a yes-no question."""
+Responds to a yes-no question."""
     answer = random.choice(answers)
     await bot.send_message(msg.channel, answer)

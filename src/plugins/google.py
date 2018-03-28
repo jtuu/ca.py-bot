@@ -28,7 +28,7 @@ def format_response(response):
 
 async def action(bot, msg):
     """**!g** _search\_term_
-    Does a Google search for _search\_term_."""
+Does a Google search for _search\_term_."""
     match = match_pattern.match(msg.clean_content)
     if match:
         params = dict(default_params)

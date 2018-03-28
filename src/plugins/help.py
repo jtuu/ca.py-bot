@@ -7,7 +7,7 @@ match_pattern = re.compile(r"^!help\s*(.*)")
 
 async def action(bot, msg):
     """**!help** _command_
-    Display help for _command_."""
+Display help for _command_."""
     match = match_pattern.match(msg.clean_content)
     if match:
         query = match.groups()[0]

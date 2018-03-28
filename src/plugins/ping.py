@@ -5,5 +5,5 @@ keywords = ["ping"]
 
 async def action(bot, msg):
     """**!ping**
-    Responds with 'pong'."""
+Responds with 'pong'."""
     await bot.send_message(msg.channel, "pong")

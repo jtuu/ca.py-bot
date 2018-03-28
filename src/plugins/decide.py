@@ -10,8 +10,8 @@ split_pattern = re.compile("\s+" + delim + "\s+")
 
 async def action(bot, msg):
     """**!decide** _a_ **or** _b_ [**or** _c_] ...
-    Helps you with decisions.
-    `!decide to be or not to be`"""
+Helps you with decisions.
+`!decide to be or not to be`"""
     msg_text = msg.clean_content
     match = match_pattern.match(msg_text)
     if match:

@@ -36,7 +36,7 @@ max_embed_footer_length = 2048
 
 async def action(bot, msg):
     """**!ud** _term_
-    Prints the Urban Dictionary definition for _term_."""
+Prints the Urban Dictionary definition for _term_."""
     match = match_pattern.match(msg.clean_content)
     if match:
         term = get_term(match.groups()[0])
