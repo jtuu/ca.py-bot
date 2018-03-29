@@ -9,5 +9,6 @@ flask = "*"
 requests-oauthlib = "*"
 pylint = "*"
 pyinotify = "*"
+mwclient = "*"
 
 [dev-packages]
