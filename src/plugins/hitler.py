@@ -7,6 +7,7 @@ trigger = re.compile("^!hitler")
 keywords = ["hitler", "wiki", "wikipedia", "game"]
 
 match_pattern = re.compile(r"^!hitler\s*(\d*)")
+newline = re.compile(r"\n")
 
 class HitlerGame():
     def __init__(self):
@@ -64,8 +65,9 @@ class HitlerGame():
             self.current_links = None
         
 game = None
-idle_timeout = 120
+idle_timeout = 300
 last_activity = 0
+last_messages = []
 
 def get_game():
     global game
@@ -85,6 +87,12 @@ async def action(bot, msg):
 Play the Wikipedia Hitler game. The point is to start from a random page and get to the Hitler page in as few links as possible."""
     match = match_pattern.match(msg.clean_content)
     if match:
+        if len(last_messages):
+            first_last = last_messages.pop(0)
+            await bot.edit_message(first_last, newline.split(first_last.content)[0])
+            while len(last_messages):
+                last_msg = last_messages.pop()
+                await bot.delete_message(last_msg)
         game = get_game()
         game.get_next_action()(match.groups()[0])
         output = game.get_history() + "\n"
@@ -93,4 +101,5 @@ Play the Wikipedia Hitler game. The point is to start from a random page and get
             delete_game()
         else:
             output += game.get_link_list(formatted=True)
-        await bot.send_message(msg.channel, output, escape_formatting=False)
+        new_msgs = await bot.send_message(msg.channel, output, escape_formatting=False, split_long=True)
+        last_messages.extend(new_msgs)
