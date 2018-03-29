@@ -24,11 +24,7 @@ class Bot(discord.Client):
             asyncio.ensure_future(super(Bot, self).start(self.__config.get("token"))),
         ]))
 
-    @asyncio.coroutine
-    def send_message(self, destination, content=None, *, tts=False, embed=None, escape_formatting=True):
-        if content:
-            content = content[:max_message_content_length]
-
+    async def send_message(self, destination, content=None, *, tts=False, embed=None, escape_formatting=True, split_long=False):
         if escape_formatting:
             if content:
                 content = discord_escape(content)
@@ -43,7 +39,19 @@ class Bot(discord.Client):
                         field.name = discord_escape(field.name)
                         field.value = discord_escape(field.value)
 
-        return super().send_message(destination, content=content, tts=tts, embed=embed)
+        if content:
+            if split_long:
+                i = 0
+                msgs = []
+                while i < len(content):
+                    msg = await super().send_message(destination, content[i:i + max_message_content_length], tts=tts, embed=embed)
+                    msgs.append(msg)
+                    i += max_message_content_length
+                return msgs
+            content = content[:max_message_content_length]
+
+        m = await super().send_message(destination, content=content, tts=tts, embed=embed)
+        return m
 
     async def on_ready(self):
         print("Logged in as " + self.user.name)
