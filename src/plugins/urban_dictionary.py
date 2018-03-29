@@ -7,7 +7,7 @@ from discord import Embed
 trigger = re.compile("^!ud")
 keywords = ["ud", "urban", "urban dictionary"]
 
-match_pattern = re.compile(r"^!ud\s+(\S+)")
+match_pattern = re.compile(r"^!ud\s+(.+)")
 base_url = "http://api.urbandictionary.com/v0/define"
 
 def get_term(term):
