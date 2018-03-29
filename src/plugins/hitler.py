@@ -95,11 +95,11 @@ Play the Wikipedia Hitler game. The point is to start from a random page and get
                 await bot.delete_message(last_msg)
         game = get_game()
         game.get_next_action()(match.groups()[0])
-        output = game.get_history() + "\n"
+        output = game.get_history()
         if game.won():
-            output += "You're winner! Score: %d" % game.get_score()
+            output += " **You're winner! Score: %d" % game.get_score() + "**"
             delete_game()
         else:
-            output += game.get_link_list(formatted=True)
+            output += "\n" + game.get_link_list(formatted=True)
         new_msgs = await bot.send_message(msg.channel, output, escape_formatting=False, split_long=True)
         last_messages.extend(new_msgs)
