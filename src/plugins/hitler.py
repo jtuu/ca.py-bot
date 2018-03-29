@@ -78,7 +78,7 @@ def get_game():
 
 def delete_game():
     global game
-    del game
+    game = None
 
 async def action(bot, msg):
     """**!hitler** [_num_]
