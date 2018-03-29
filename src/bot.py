@@ -8,6 +8,8 @@ from .utils import discord_escape, levenshtein_distance
 def is_well_formed_plugin(plugin):
     return hasattr(plugin, "trigger") and isinstance(plugin.trigger, re._pattern_type) and hasattr(plugin, "action") and callable(plugin.action)
 
+max_message_content_length = 2000
+
 class Bot(discord.Client):
     def __init__(self, config):
         discord.Client.__init__(self)
@@ -24,6 +26,9 @@ class Bot(discord.Client):
 
     @asyncio.coroutine
     def send_message(self, destination, content=None, *, tts=False, embed=None, escape_formatting=True):
+        if content:
+            content = content[:max_message_content_length]
+
         if escape_formatting:
             if content:
                 content = discord_escape(content)
