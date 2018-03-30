@@ -2,6 +2,7 @@ import re
 import mwclient
 import itertools
 import time
+import asyncio
 
 trigger = re.compile("^!hitler")
 keywords = ["hitler", "wiki", "wikipedia", "game"]
@@ -59,7 +60,7 @@ class HitlerGame():
                 print("selected index out of range", idx, len(links))
                 return
 
-            selected = next(itertools.islice(links, idx, idx + 1))
+            selected = next(itertools.islice(links, idx, idx + 1)) # follow redirects somehow
             self.history.append(selected)
             self.current = selected
             self.current_links = None
@@ -88,11 +89,13 @@ Play the Wikipedia Hitler game. The point is to start from a random page and get
     match = match_pattern.match(msg.clean_content)
     if match:
         if len(last_messages):
+            coros = []
             first_last = last_messages.pop(0)
-            await bot.edit_message(first_last, newline.split(first_last.content)[0])
+            coros.append(bot.edit_message(first_last, newline.split(first_last.content)[0]))
             while len(last_messages):
                 last_msg = last_messages.pop()
-                await bot.delete_message(last_msg)
+                coros.append(bot.delete_message(last_msg))
+            await asyncio.wait(coros)
         game = get_game()
         game.get_next_action()(match.groups()[0])
         output = game.get_history()
