@@ -21,14 +21,15 @@ result_queries = [
     ".pod[@title='Name']/subpod/plaintext",
     ".pod[@title='Basic Information']/subpod/plaintext",
     ".pod[@title='Weather forecast']/subpod/plaintext",
-    ".pod[last()]/subpod/plaintext"
+    ".pod/subpod/plaintext"
 ]
 
 def format_response(response):
     root = etree.fromstring(response)
     for query in result_queries:
-        for element in root.findall(query):
-            return element.text
+        for element in root.findall(query)[::-1]:
+            if element.text:
+                return element.text
 
 async def action(bot, msg):
     """**!wa** _query_
