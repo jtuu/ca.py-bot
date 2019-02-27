@@ -5,6 +5,7 @@ import urllib.request
 import praw
 from discord import Embed
 from ..utils import rchop
+import random
 
 trigger = re.compile("^!r(?:eddit)?")
 keywords = ["r", "reddit", "fun"]
@@ -93,6 +94,17 @@ def get_post_content(post):
         return post.url
     return make_post_url(post)
 
+def alt_random_post(sr):
+    num_retry = 2
+    limit = 1000
+    rand = random.randint(0, limit - 1)
+    for i in range(0, num_retry):
+        i = 0
+        for post in sr.hot(limit=limit):
+            if i == rand:
+                return post
+            i += 1
+        rand = rand % i
 
 async def action(bot, msg):
     """**!r** _subreddit_
@@ -104,7 +116,12 @@ Show random post from a subreddit.
         return
     args = msg.clean_content.split(" ")[1:]
     sr = reddit.random_subreddit() if len(args) < 1 else reddit.subreddit(args[0])
-    post = fetch_post(sr.random())
+    try:
+        post = sr.random()
+    except praw.exceptions.ClientException as err:
+        print(err)
+        post = alt_random_post(sr)
+    post = fetch_post(post)
     if post:
         result = get_post_content(post)
         if isinstance(result, Embed):
