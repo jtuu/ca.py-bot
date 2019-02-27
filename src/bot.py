@@ -63,12 +63,16 @@ class Bot(discord.Client):
         return False
 
     def find_plugin_by_keyword(self, search_kw):
+        best_match = None
+        min_val = float("inf")
         for plugin in self.__plugin_loader.get_modules():
             if hasattr(plugin, "keywords"):
                 for kw in plugin.keywords:
-                    if levenshtein_distance(kw, search_kw) < 2:
-                        return plugin
-        return None
+                    val = levenshtein_distance(kw, search_kw)
+                    if val < min_val:
+                        min_val = val
+                        best_match = plugin
+        return best_match
 
     def get_good_plugin_keywords(self):
         return [plugin.keywords[0] for plugin in self.__plugin_loader.get_modules() if hasattr(plugin, "keywords")]
