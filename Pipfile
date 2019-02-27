@@ -10,5 +10,6 @@ requests-oauthlib = "*"
 pylint = "*"
 pyinotify = "*"
 mwclient = "*"
+praw = "*"
 
 [dev-packages]

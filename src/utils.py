@@ -39,3 +39,8 @@ def levenshtein_distance(s1, s2):
         previous_row = current_row
     
     return previous_row[-1]
+
+def rchop(my_str, suffix):
+    if my_str.endswith(suffix):
+        return my_str[:-len(suffix)]
+    return my_str
