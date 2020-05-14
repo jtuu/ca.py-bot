@@ -50,7 +50,7 @@ class Bot(discord.Client):
                 return msgs
             content = content[:max_message_content_length]
 
-        m = await super().send_message(destination, content=content, tts=tts, embed=embed)
+        m = await destination.send(content=content, tts=tts, embed=embed)
         return m
 
     async def on_ready(self):

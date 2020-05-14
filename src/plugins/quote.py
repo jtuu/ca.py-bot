@@ -19,7 +19,7 @@ Prints a random message from the channel."""
     log_limit = randint(1, max_log_length)
 
     # for some reason the discord api returns the messages in reverse chronological order
-    logs = bot.logs_from(msg.channel, after=query_date, limit=log_limit)
+    logs = msg.channel.history(after=query_date, limit=log_limit)
 
     async for log_msg in logs:
         if log_msg.author != bot.user and not bot.is_message_triggering(log_msg):
