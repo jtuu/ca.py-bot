@@ -11,5 +11,7 @@ pylint = "*"
 pyinotify = "*"
 mwclient = "*"
 praw = "*"
+pillow = "*"
+emoji = "*"
 
 [dev-packages]
