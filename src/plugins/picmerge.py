@@ -1,5 +1,6 @@
 import re
 import urllib.request
+from urllib.request import HTTPError, URLError
 import discord
 from PIL import Image
 import io
@@ -64,7 +65,7 @@ def get_image(bot, arg):
 
     try:
         req = urllib.request.Request(url, method = "HEAD", headers = {"User-Agent": "capy"})
-    except (HTTPError, URLError):
+    except (HTTPError, URLError, ValueError):
         return None
 
     res = urllib.request.urlopen(req)
