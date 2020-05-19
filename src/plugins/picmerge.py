@@ -31,9 +31,9 @@ def parse_custom_emoji(bot, text):
 
 # Based on https://github.com/twitter/twemoji/blob/42f8843cb3aa1f9403d5479d7e3f7e01176ad08e/scripts/build.js#L571
 def get_twemoji_url(emoji):
+    if zerow_joiner not in emoji:
+        emoji = re.sub(variant_selector, "", emoji)
     if emoji in UNICODE_EMOJI:
-        if zerow_joiner not in emoji:
-            emoji = re.sub(variant_selector, "", emoji)
         surrogates = list(emoji)
         r = []
         c = 0
