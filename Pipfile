@@ -10,7 +10,7 @@ requests-oauthlib = "*"
 pylint = "*"
 pyinotify = "*"
 mwclient = "*"
-praw = "*"
+praw = "==7.0.0"
 pillow = "*"
 emoji = "*"
 
