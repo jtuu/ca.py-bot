@@ -7,7 +7,7 @@ import io
 from emoji import UNICODE_EMOJI
 
 trigger = re.compile("^!picmerge")
-keywords = ["picture", "merge", "picmerge", "image"]
+keywords = ["picmerge", "picture", "merge", "image"]
 '<:stare:451126180750557196>'
 custom_emoji_pattern = re.compile("<:(?P<name>.+):(?P<id>.+)>")
 max_img_size = 20000000 # 20mb
